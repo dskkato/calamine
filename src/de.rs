@@ -382,7 +382,7 @@ where
             iter: column_indexes.iter(),
             headers,
             cells,
-            pos: pos,
+            pos,
             peek: None,
         }
     }
@@ -522,7 +522,7 @@ impl<'a> ToCellDeserializer<'a> for DataType {
     fn to_cell_deserializer(&'a self, pos: (u32, u32)) -> DataTypeDeserializer<'a> {
         DataTypeDeserializer {
             data_type: self,
-            pos: pos,
+            pos,
         }
     }
 

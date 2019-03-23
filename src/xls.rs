@@ -108,7 +108,7 @@ impl<RS: Read + Seek> Reader for Xls<RS> {
 
         let mut xls = Xls {
             sheets: HashMap::new(),
-            vba: vba,
+            vba,
             marker: PhantomData,
             metadata: Metadata::default(),
         };
@@ -620,7 +620,7 @@ impl<'a> Iterator for RecordIter<'a> {
         Some(Ok(Record {
             typ: t,
             data: d,
-            cont: cont,
+            cont,
         }))
     }
 }

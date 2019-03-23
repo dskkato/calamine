@@ -57,6 +57,7 @@
 //! }
 //! ```
 #![deny(missing_docs)]
+#![allow(clippy::cast_lossless)]
 
 extern crate byteorder;
 extern crate codepage;
@@ -257,8 +258,8 @@ impl<T: CellType> Range<T> {
     pub fn new(start: (u32, u32), end: (u32, u32)) -> Range<T> {
         assert!(start <= end, "invalid range bounds");
         Range {
-            start: start,
-            end: end,
+            start,
+            end,
             inner: vec![T::default(); ((end.0 - start.0 + 1) * (end.1 - start.1 + 1)) as usize],
         }
     }

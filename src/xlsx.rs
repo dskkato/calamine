@@ -94,7 +94,7 @@ impl FromStr for CellErrorType {
             "#NUM!" => Ok(CellErrorType::Num),
             "#REF!" => Ok(CellErrorType::Ref),
             "#VALUE!" => Ok(CellErrorType::Value),
-            _ => return Err(XlsxError::CellError(s.into())),
+            _ => Err(XlsxError::CellError(s.into())),
         }
     }
 }
@@ -511,15 +511,15 @@ fn read_sheet_data(
             Some(b"is") => {
                 // this case should be handled in outer loop over cell elements, in which
                 // case read_inline_str is called instead. Case included here for completeness.
-                return Err(XlsxError::Unexpected(
+                Err(XlsxError::Unexpected(
                     "called read_value on a cell of type inlineStr",
-                ));
+                ))
             }
             Some(t) => {
                 let t = ::std::str::from_utf8(t)
                     .unwrap_or("<utf8 error>")
                     .to_string();
-                return Err(XlsxError::CellTAttribute(t));
+                Err(XlsxError::CellTAttribute(t))
             }
         }
     }

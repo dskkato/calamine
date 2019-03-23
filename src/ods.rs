@@ -18,7 +18,7 @@ use std::marker::PhantomData;
 use vba::VbaProject;
 use {DataType, Metadata, Range, Reader};
 
-const MIMETYPE: &'static [u8] = b"application/vnd.oasis.opendocument.spreadsheet";
+const MIMETYPE: &[u8] = b"application/vnd.oasis.opendocument.spreadsheet";
 
 type OdsReader<'a> = XmlReader<BufReader<ZipFile<'a>>>;
 
@@ -113,8 +113,8 @@ impl<RS: Read + Seek> Reader for Ods<RS> {
         };
 
         Ok(Ods {
-            sheets: sheets,
-            metadata: metadata,
+            sheets,
+            metadata,
             marker: PhantomData,
         })
     }

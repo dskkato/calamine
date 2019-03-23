@@ -51,7 +51,7 @@ pub const FTAB_LEN: usize = 485;
 
 /* [MS-XLS] 2.5.198.17 */
 /* [MS-XLSB] 2.5.97.10 */
-pub const FTAB: [&'static str; FTAB_LEN] = [
+pub const FTAB: [&str; FTAB_LEN] = [
     "COUNT",
     "IF",
     "ISNA",

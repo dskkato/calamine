@@ -82,7 +82,7 @@ impl VbaProject {
         let encoding = read_dir_information(stream)?;
 
         // array of REFERENCE records
-        let refs = Reference::from_stream(stream, &encoding)?;
+        let references = Reference::from_stream(stream, &encoding)?;
 
         // modules
         let mods: Vec<Module> = read_modules(stream, &encoding)?;
@@ -98,9 +98,9 @@ impl VbaProject {
             .collect::<Result<HashMap<_, _>, _>>()?;
 
         Ok(VbaProject {
-            references: refs,
-            modules: modules,
-            encoding: encoding,
+            references,
+            modules,
+            encoding,
         })
     }
 
@@ -147,7 +147,7 @@ impl VbaProject {
     pub fn get_module_raw(&self, name: &str) -> Result<&[u8], VbaError> {
         match self.modules.get(name) {
             Some(m) => Ok(&**m),
-            None => return Err(VbaError::ModuleNotFound(name.into())),
+            None => Err(VbaError::ModuleNotFound(name.into())),
         }
     }
 }
@@ -283,7 +283,7 @@ impl Reference {
                 }
                 Ok(())
             }
-            _ => return Err(VbaError::LibId),
+            _ => Err(VbaError::LibId),
         }
     }
 }
@@ -354,7 +354,7 @@ fn read_modules(stream: &mut &[u8], encoding: &XlsEncoding) -> Result<Vec<Module
         // offset
         check_record(0x0031, stream)?;
         *stream = &stream[4..];
-        let offset = stream.read_u32::<LittleEndian>()? as usize;
+        let text_offset = stream.read_u32::<LittleEndian>()? as usize;
 
         // help context
         check_record(0x001E, stream)?;
@@ -382,9 +382,9 @@ fn read_modules(stream: &mut &[u8], encoding: &XlsEncoding) -> Result<Vec<Module
         *stream = &stream[4..]; // reserved
 
         modules.push(Module {
-            name: name,
-            stream_name: stream_name,
-            text_offset: offset,
+            name,
+            stream_name,
+            text_offset,
         });
     }
 
